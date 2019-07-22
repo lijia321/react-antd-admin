@@ -1,13 +1,11 @@
 import React, { Component } from 'react'
 
-export class HomePage extends Component {
+export default class CenterPage extends Component {
     render() {
         return (
             <div>
-                home
+                CenterPage
             </div>
         )
     }
 }
-
-export default HomePage

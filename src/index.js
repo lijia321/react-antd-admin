@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import AppRouter from './routers';
+import './index.less';
+import AppRouter from './App';
 import { LocaleProvider } from 'antd';
 import zhCN from 'antd/es/locale-provider/zh_CN';
 import * as serviceWorker from './serviceWorker';
