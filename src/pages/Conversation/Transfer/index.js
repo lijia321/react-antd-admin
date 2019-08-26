@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
-import {Realtime} from 'leancloud-realtime';
 
-export default class CenterPage extends Component {
+export class MainPage extends Component {
     render() {
         return (
             <div>
-                CenterPage
+                Transfer
             </div>
         )
     }
 }
+
+export default MainPage

@@ -1,10 +1,17 @@
+/*
+ * @Descripttion: Do not edit
+ * @Author: 李佳
+ * @Date: 2019-07-22 14:44:11
+ * @LastEditors: 李佳
+ * @LastEditTime: 2019-08-26 11:22:06
+ */
 import React, { Component } from 'react'
 import { Layout, Menu } from 'antd';
 import { Link, Redirect } from "react-router-dom";
 
 import PageRoute from './route'
 import { menus } from '@src/menus'
-
+import { getFlatMap,familyTree } from '@utils'
 import './index.less'
 
 const { Header, Content, Sider } = Layout;
@@ -18,10 +25,21 @@ class App extends Component {
                   openKeys: [],
                   selectedKeys: [],
                   rootSubmenuKeys: [],
-                  loginIn:false
+                  oldOpenKeys: [],
+                  loginIn: false
             }
       }
+      componentDidMount() {
+            // console.log(this.props)
+            const selectUrl = this.props.location.pathname;
+            const id = getFlatMap(menus).filter((it) => it.key === selectUrl)[0].id;
+            this.setState({selectedKeys: [selectUrl], openKeys: familyTree(menus, id)})
+      }
 
+      getSelectedMenuKeys = pathname => {
+            // const { flatMenuKeys } = this.props;
+            // return urlToList(pathname).map(itemPath => getMenuMatches(flatMenuKeys, itemPath).pop());
+      };
       renderMenus = (menus) => {
             return menus.map((item) => {
                   if (item.children) {
@@ -43,10 +61,29 @@ class App extends Component {
                   )
             })
       }
+      handleSelect = (e) => {
+            const { openKeys } = this.state
+            // console.log(e)
+            this.setState({ selectedKeys: e.selectedKeys, oldOpenKeys: openKeys })
+      }
+      isMainMenu = key => {
+            return menus.some(item => {
+                  if (key) {
+                        return item.key === key || item.path === key;
+                  }
+                  return false;
+            });
+      };
+      handleOpenChange = openKeys => {
 
+            const moreThanOne = openKeys.filter(openKey => this.isMainMenu(openKey)).length > 1;
+            this.setState({
+                  openKeys: moreThanOne ? [openKeys.pop()] : [...openKeys],
+            });
+      };
       render() {
             // console.log(this.state.openKeys);
-           
+
             return (
                   <div className='app-container'>
                         <Layout>
@@ -62,6 +99,10 @@ class App extends Component {
                                     <Menu
                                           theme="dark"
                                           mode="inline"
+                                          selectedKeys={this.state.selectedKeys}
+                                          onSelect={this.handleSelect}
+                                          openKeys={this.state.openKeys}
+                                          onOpenChange={this.handleOpenChange}
                                     >
                                           {this.renderMenus(menus)}
 
